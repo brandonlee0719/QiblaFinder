@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#16246f'
   },
   title: {
-    fontSize: 40,
+    fontSize: 36,
     color: '#FFF'
   },
   permissionDetail: {
-    fontSize: 24,
+    fontSize: 20,
     color: '#FFF'
   },
   btnGotit: {
