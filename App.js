@@ -1,116 +1,86 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Text,
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { WebView } from 'react-native-webview';
+import * as permissions from 'react-native-permissions';
+import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
 
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+// const App = () => {
+//   return (
+//     <SafeAreaView style={styles.mainContainer}>
+//       <WebView
+//         style={styles.mainContainer}
+//         source={{ uri: 'https://qiblafinder.withgoogle.com/' }} />
+//     </SafeAreaView>
+//   );
+// };
+
+
+const camera_permission = Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+const coarse_location = Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION;
+const fine_location = Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const handleSetPermission = () => {
+    requestPermission();
+  }
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const requestPermission = () => {
+    requestMultiple([camera_permission, coarse_location, fine_location]).then((statuses) => {
+      console.log('camera_permission', statuses[camera_permission]);
+      console.log('coarse_location', statuses[coarse_location]);
+      console.log('fine_location', statuses[fine_location]);
+    });
+  }
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.mainContainer}>
+        <Text style={styles.title}>OK, let's face Qibla</Text>
+        <Text style={styles.permissionDetail}>First we will request access to your</Text>
+        <Text style={styles.permissionDetail}>camera and current location to point</Text>
+        <Text style={styles.permissionDetail}>you in the right direction.</Text>
+        <TouchableOpacity style={styles.btnGotit}
+          onPress={handleSetPermission}>
+          <Text style={styles.gotit}>Got it</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
-  );
-};
-
+  )
+}
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  mainContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#16246f'
   },
-  sectionTitle: {
+  title: {
+    fontSize: 40,
+    color: '#FFF'
+  },
+  permissionDetail: {
     fontSize: 24,
-    fontWeight: '600',
+    color: '#FFF'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  btnGotit: {
+    marginTop: 60,
+    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 60,
+    backgroundColor: '#FFF'
   },
-  highlight: {
-    fontWeight: '700',
-  },
+  gotit: {
+    fontSize: 20,
+    color: '#000'
+  }
 });
 
 export default App;
