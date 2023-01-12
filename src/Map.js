@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     right: 20,
   },
   bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(0,0,255,0.7)',
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,
