@@ -25,7 +25,7 @@ const Main = ({ navigation }) => {
       console.log('coarse_location', statuses[coarse_location]);
       console.log('fine_location', statuses[fine_location]);
       if (statuses[camera_permission] === "granted" && statuses[coarse_location] === "granted" && statuses[fine_location] === "granted")
-        navigation.push("Qibla");
+        navigation.push("Map");
     });
   }
 

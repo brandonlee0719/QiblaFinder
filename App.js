@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Main from './src/Main';
+import Map from './src/Map';
 import Qibla from './src/Qibla';
 
 LogBox.ignoreLogs(['Warning: ...']);
@@ -18,6 +19,7 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Main">
           <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+          <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
           <Stack.Screen name="Qibla" component={Qibla} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
