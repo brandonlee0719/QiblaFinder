@@ -9,16 +9,17 @@ import {
 
 import GetLocation from 'react-native-get-location';
 import MapView, { Marker } from 'react-native-maps';
+import { getDistance } from 'geolib';
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
+const LATITUDE = 43.0785;
+const LONGITUDE = 79.0955;
 const LATITUDE_DELTA = 0.1;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const Map = ({navigation}) => {
+const Map = ({ navigation }) => {
   const [region, setRegion] = useState({
     latitude: LATITUDE,
     longitude: LONGITUDE,
@@ -27,13 +28,22 @@ const Map = ({navigation}) => {
   });
   const [marker, setMarker] = useState({ coordinate: { latitude: LATITUDE, longitude: LONGITUDE } });
   const [userMarker, setUserMarker] = useState({ coordinate: { latitude: LATITUDE + 0.03, longitude: LONGITUDE + 0.03 } });
+  const [distance, setDistance] = useState(0);
 
   const onMapPress = (e) => {
-    setMarker({ coordinate: e.nativeEvent.coordinate });
+    setUserMarker({ coordinate: e.nativeEvent.coordinate });
+    var dis = getDistance(
+      { latitude: LATITUDE, longitude: LONGITUDE },
+      { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude },
+    );
+    console.log(
+      `Distance\n\n${dis} Meter\nOR\n${dis / 1000} KM`
+    );
+    setDistance(dis/1000);
   }
 
   const handleAR = () => {
-    navigation.push("Qibla")
+    navigation.push("Qibla", {dis: distance})
   }
 
   useEffect(() => {
@@ -44,14 +54,14 @@ const Map = ({navigation}) => {
     })
       .then(location => {
         console.log("location", location)
-        setRegion({
-          latitude: location.latitude,
-          longitude: location.longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        })
+        // setRegion({
+        //   latitude: location.latitude,
+        //   longitude: location.longitude,
+        //   latitudeDelta: LATITUDE_DELTA,
+        //   longitudeDelta: LONGITUDE_DELTA,
+        // })
         setUserMarker({ coordinate: { latitude: location.latitude, longitude: location.longitude } });
-        setMarker({ coordinate: { latitude: location.latitude + 0.03, longitude: location.longitude + 0.03 } });
+        // setMarker({ coordinate: { latitude: location.latitude + 0.03, longitude: location.longitude + 0.03 } });
       })
       .catch(error => {
         const { code, message } = error;
