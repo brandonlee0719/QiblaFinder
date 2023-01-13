@@ -13,13 +13,20 @@ import MapView, { Marker } from 'react-native-maps';
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
+const LATITUDE = 37.78825;
+const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.1;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Map = ({navigation}) => {
-  const [region, setRegion] = useState(null);
-  const [marker, setMarker] = useState(null);
-  const [userMarker, setUserMarker] = useState(null);
+  const [region, setRegion] = useState({
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  });
+  const [marker, setMarker] = useState({ coordinate: { latitude: LATITUDE, longitude: LONGITUDE } });
+  const [userMarker, setUserMarker] = useState({ coordinate: { latitude: LATITUDE + 0.03, longitude: LONGITUDE + 0.03 } });
 
   const onMapPress = (e) => {
     setMarker({ coordinate: e.nativeEvent.coordinate });
@@ -33,8 +40,10 @@ const Map = ({navigation}) => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
+      maximumAge: 3600000
     })
       .then(location => {
+        console.log("location", location)
         setRegion({
           latitude: location.latitude,
           longitude: location.longitude,
@@ -97,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   gotit: {
-    color: '#000'
+    color: '#FFF'
   }
 });
 
