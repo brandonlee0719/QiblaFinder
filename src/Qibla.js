@@ -21,10 +21,8 @@ import {
   ViroAnimations,
 } from '@viro-community/react-viro';
 
-const HelloWorldSceneAR = ({navigation}) => {
-  // const { dis } = route.params;
-
-  const [text, setText] = useState('Initializing AR...');
+const HelloWorldSceneAR = () => {
+    const [text, setText] = useState('Initializing AR...');
 
   // function onInitialized(state, reason) {
   //   console.log('guncelleme', state, reason);
@@ -86,7 +84,8 @@ const HelloWorldSceneAR = ({navigation}) => {
   );
 };
 
-const Qibla = () => {
+const Qibla = ({navigation, route}) => {
+  // const { dis } = route.params;
   return (
     <ViroARSceneNavigator
       autofocus={true}

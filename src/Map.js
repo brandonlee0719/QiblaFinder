@@ -14,8 +14,8 @@ import { getDistance } from 'geolib';
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 43.0785;
-const LONGITUDE = 79.0955;
+const LATITUDE = 21.4225;
+const LONGITUDE = 39.8262;
 const LATITUDE_DELTA = 0.1;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
