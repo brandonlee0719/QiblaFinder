@@ -20,22 +20,22 @@ import {
   ViroQuad,
   ViroAnimations,
 } from '@viro-community/react-viro';
+import CompassHeading from 'react-native-compass-heading';
 
-const HelloWorldSceneAR = () => {
-    const [text, setText] = useState('Initializing AR...');
+const HelloWorldSceneAR = (dis) => {
+  const [text, setText] = useState('Initializing AR...');
 
-  // function onInitialized(state, reason) {
-  //   console.log('guncelleme', state, reason);
-  //   if (state === ViroConstants.TRACKING_NORMAL) {
-  //     setText('AR Demo!');
-  //   } else if (state === ViroConstants.TRACKING_NONE) {
-  //     // Handle loss of tracking
-  //   }
-  // }
+  function onInitialized(state, reason) {
+    console.log('guncelleme', state, reason);
+    if (state === ViroConstants.TRACKING_NORMAL) {
+      setText(`${dis} KM`);
+    } else if (state === ViroConstants.TRACKING_NONE) {
+      // Handle loss of tracking
+    }
+  }
 
   return (
-    // <ViroARScene onTrackingUpdated={onInitialized}>
-    <ViroARScene>
+    <ViroARScene onTrackingUpdated={onInitialized}>
       <ViroText
         text={text}
         scale={[0.5, 0.5, 0.5]}
@@ -57,14 +57,14 @@ const HelloWorldSceneAR = () => {
             shadowNearZ={2}
             shadowFarZ={5}
             shadowOpacity={.7} />
-          {/* <Viro3DObject
-            source={require('./emoji_smile.vrx')}
+          <Viro3DObject
             position={[0, .1, 0]}
             scale={[.2, .2, .2]}
             type="VRX"
+            source={require('../assets/emoji_smile.vrx')}
             lightReceivingBitMask={3}
             shadowCastingBitMask={2}
-            transformBehaviors={['billboardY']} /> */}
+            transformBehaviors={['billboardY']} />
           <ViroQuad
             rotation={[-90, 0, 0]}
             width={.5} height={.5}
@@ -85,14 +85,31 @@ const HelloWorldSceneAR = () => {
 };
 
 const Qibla = ({navigation, route}) => {
-  // const { dis } = route.params;
+  const { dis } = route.params;
+  const [heading, setHeading] = useState("");
+  const [accuracy, setAccuracy] = useState("");
+
+  useEffect(() => {
+    const degree_update_rate = 3;
+
+    CompassHeading.start(degree_update_rate, ({heading, accuracy}) => {
+      console.log('CompassHeading: ', heading, accuracy);
+      setHeading(heading);
+      setAccuracy(accuracy);
+    });
+
+    return () => {
+      CompassHeading.stop();
+    };
+  }, []);
+
   return (
     <ViroARSceneNavigator
       autofocus={true}
       initialScene={{
-        scene: HelloWorldSceneAR,
+        scene: () => HelloWorldSceneAR(dis),
       }}
-      style={styles.f1}
+      style={{flex: 1}}
     />
   );
 }
